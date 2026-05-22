@@ -21,7 +21,7 @@ stubs, make the tests pass, customize for your group, then submit.
 | `tests/test_list.py`, `tests/test_terminate.py`, `tests/test_clean.py` — failing tests that define each command's behavior | Make them green |
 | Module docstrings in every `commands/*_cmd.py` — full spec, hints, AWS APIs to use | Read them carefully before coding |
 | `Makefile`, `requirements*.txt`, `.gitignore`, `LICENSE` | Untouched |
-| `sample_output/*_example.txt` | Replace with REAL outputs once your impl works |
+| `sample_output/*.txt` | Replace with REAL outputs once your impl works |
 
 **Initial state of `make test`:** 10 passed (helpers), 15 failed (commands).
 You're done when all 25 pass.
@@ -32,7 +32,7 @@ You're done when all 25 pass.
 
 ```bash
 # 1. Fork / clone
-git clone <your-fork-url> g<N>-costctl && cd g<N>-costctl
+git clone <your-fork-url> g9-costctl && cd g9-costctl
 
 # 2. Install
 make install-dev                   # or: pip install -r requirements-dev.txt
@@ -271,7 +271,7 @@ Add a `REFLECTIONS.md` to your repo. Sample prompts:
 
 ## Submission checklist (W6 side challenge)
 
-- [ ] Fork → rename to `g<N>-costctl` → clone locally
+- [ ] Fork → rename to `g9-costctl` → clone locally
 - [ ] `make install-dev && make test` shows 10 passed at start
 - [ ] Implement `list` → `pytest tests/test_list.py` all green (7 more pass)
 - [ ] Implement ≥ 2 of (`cost`, `terminate`, `tag`) — `terminate` tests green if you pick it
@@ -280,11 +280,11 @@ Add a `REFLECTIONS.md` to your repo. Sample prompts:
 - [ ] Replace `sample_output/*_example.txt` with real outputs from your account
 - [ ] `REFLECTIONS.md` with 2+ answers
 - [ ] At least 3 meaningful commits (init → first command working → final polish)
-- [ ] Replace `g<N>` placeholders throughout README with your real group number
+- [ ] Replace `g9` placeholders throughout README with your real group number
 - [ ] Add Team section with member names
 - [ ] Tag: `git tag w6-sidechallenge-v1 && git push --tags`
 - [ ] Post link in Slack `#w6-sidechallenge` thread:
-      `G<N> — <repo-url> — implemented: list, cost, terminate (21/25 tests passing)`
+   `G9 — <repo-url> — implemented: list, cost, terminate (21/25 tests passing)`
 
 Reminder: **OPTIONAL and does NOT count toward W6 score.** Recognition is
 separate (Slack callout / Phase 2 selection / portfolio).
@@ -299,11 +299,7 @@ MIT — see `LICENSE`.
 
 ## Team
 
-> Replace before submission:
-
-- <name 1>
-- <name 2>
-- <name 3>
+Lê Hoàng Trung Kiên
 
 ---
 
