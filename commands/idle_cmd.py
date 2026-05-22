@@ -84,8 +84,8 @@ def run(args):
         args.threshold  — float, default 5.0 (% CPU)
         args.hours      — int, default 24
     """
-    ec2 = boto3.client("ec2", region_name="us-east-1")
-    cw = boto3.client("cloudwatch", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
+    cw = boto3.client("cloudwatch")
 
     print(
         f"Scanning running EC2 (excluding keep=true) — threshold {args.threshold:.1f}% "

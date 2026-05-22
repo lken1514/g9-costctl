@@ -58,19 +58,19 @@ def _to_tags(set_args):
 
 
 def _tag_ec2(rid, tags):
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     ec2.create_tags(Resources=[rid], Tags=tags)
 
 
 def _tag_rds(rid, tags):
-    rds = boto3.client("rds", region_name="us-east-1")
+    rds = boto3.client("rds")
     resp = rds.describe_db_instances(DBInstanceIdentifier=rid)
     arn = resp["DBInstances"][0]["DBInstanceArn"]
     rds.add_tags_to_resource(ResourceName=arn, Tags=tags)
 
 
 def _tag_s3(rid, tags):
-    s3 = boto3.client("s3", region_name="us-east-1")
+    s3 = boto3.client("s3")
     try:
         existing = s3.get_bucket_tagging(Bucket=rid).get("TagSet", [])
     except ClientError as exc:
@@ -88,7 +88,7 @@ def _tag_s3(rid, tags):
 
 
 def _tag_volume(rid, tags):
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     ec2.create_tags(Resources=[rid], Tags=tags)
 
 

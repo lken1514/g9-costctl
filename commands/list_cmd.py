@@ -50,7 +50,7 @@ def _list_ec2(want, missing):
     Returns:
         list of (instance_id, instance_type, state, tags_dict) tuples
     """
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     rows = []
     paginator = ec2.get_paginator("describe_instances")
     for page in paginator.paginate():
@@ -78,7 +78,7 @@ def _list_rds(want, missing):
     Returns:
         list of (db_id, db_class, db_status, tags_dict) tuples
     """
-    rds = boto3.client("rds", region_name="us-east-1")
+    rds = boto3.client("rds")
     rows = []
     for db in rds.describe_db_instances().get("DBInstances", []):
         arn = db["DBInstanceArn"]
@@ -105,7 +105,7 @@ def _list_s3(want, missing):
     Returns:
         list of (bucket_name, "bucket", "active", tags_dict) tuples
     """
-    s3 = boto3.client("s3", region_name="us-east-1")
+    s3 = boto3.client("s3")
     rows = []
     for bucket in s3.list_buckets().get("Buckets", []):
         name = bucket["Name"]
@@ -130,7 +130,7 @@ def _list_volume(want, missing):
         list of (volume_id, "<type>-<size>GB", state, tags_dict) tuples
         e.g. ("vol-0abc", "gp2-100GB", "in-use", {"purpose": "practice"})
     """
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     rows = []
     paginator = ec2.get_paginator("describe_volumes")
     for page in paginator.paginate():

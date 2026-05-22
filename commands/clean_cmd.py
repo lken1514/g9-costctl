@@ -46,7 +46,7 @@ from commands._common import parse_kv, tags_to_dict
 
 def _find_targets(tag_key, tag_val):
     """Return {"ec2": [...], "volume": [...]} matching tag in non-terminal state."""
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     targets = {"ec2": [], "volume": []}
 
     paginator = ec2.get_paginator("describe_instances")
@@ -95,7 +95,7 @@ def run(args):
         print("(dry-run — pass --apply to execute)")
         return
 
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     if ec2_ids:
         ec2.terminate_instances(InstanceIds=ec2_ids)
     for vid in vol_ids:

@@ -307,3 +307,13 @@ Lê Hoàng Trung Kiên
 
 *Starter scaffold from the XBrain W6 side challenge —
 `outputs/W6/costctl-starter/` in the program repo.*
+
+---
+
+## Evidence
+
+![Screenshot 2026-05-22 205053](evidence/Screenshot%202026-05-22%20205053.png)
+![Screenshot 2026-05-22 205313](evidence/Screenshot%202026-05-22%20205313.png)
+
+Figure 1: AWS EC2 console (us-west-2) showing instances.
+Figure 2: Pytest run with 25/25 passing.

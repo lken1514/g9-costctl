@@ -1,3 +1,3 @@
 EC2 missing:Application — 1 found:
 ------------------------------------------------------------------------------
-  i-0b4ea9a068139729e    t3.micro     running      Name=my-ec2
+  i-0e0ad7693aa1a181a    t3.micro     stopped      Environment=dev Name=my-ec2-test keep=false

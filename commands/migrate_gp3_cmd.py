@@ -79,7 +79,7 @@ def run(args):
         args.apply       — bool, default False (dry-run)
         args.volume_id   — optional str, only migrate this volume when --apply
     """
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     delta = GP2_PRICE - GP3_PRICE
 
     if not args.apply:

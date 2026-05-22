@@ -1,3 +1,5 @@
-EC2 no-filter — 1 found:
+EC2 no-filter — 3 found:
 ------------------------------------------------------------------------------
-  i-0b4ea9a068139729e    t3.micro     running      Name=my-ec2
+  i-0e0ad7693aa1a181a    t3.micro     stopped      Environment=dev Name=my-ec2-test keep=false
+  i-00ecf42abc7a736a3    t3.small     terminated   AmazonECSManaged=true Application=Merxly Backup=true CostCenter=G9 Environment=dev Name=xbrain-ecs-us-dev Owner=team9xbrain@email.com aws:autoscaling:groupName=xbrain-ecs-asg-us-dev aws:ec2launchtemplate:id=lt-06366ccd1d361ad07 aws:ec2launchtemplate:version=1 keep=true
+  i-0a18937bb5970fe48    t3.small     terminated   AmazonECSManaged=true Application=Merxly Backup=true CostCenter=G9 Environment=us-dev Name=xbrain-ecs-us-dev Owner=team9xbrain@email.com aws:autoscaling:groupName=xbrain-ecs-asg-us-dev aws:ec2launchtemplate:id=lt-06366ccd1d361ad07 aws:ec2launchtemplate:version=1 keep=true

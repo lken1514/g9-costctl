@@ -61,7 +61,7 @@ def _terminate_ec2(rid, force):
     if not confirm(f"Terminate EC2 {rid}?", force=force):
         print("Aborted.")
         return
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     ec2.terminate_instances(InstanceIds=[rid])
     print(f"Terminated EC2 {rid}")
 
@@ -75,7 +75,7 @@ def _terminate_rds(rid, force):
     if not confirm(f"Stop RDS {rid}?", force=force):
         print("Aborted.")
         return
-    rds = boto3.client("rds", region_name="us-east-1")
+    rds = boto3.client("rds")
     rds.stop_db_instance(DBInstanceIdentifier=rid)
     print(f"Stopped RDS {rid}")
 
@@ -85,7 +85,7 @@ def _terminate_s3(rid, force):
     if not confirm(f"Delete S3 bucket {rid}?", force=force):
         print("Aborted.")
         return
-    s3 = boto3.client("s3", region_name="us-east-1")
+    s3 = boto3.client("s3")
     count = s3.list_objects_v2(Bucket=rid).get("KeyCount", 0)
     if count:
         print(f"Refusing — bucket {rid} has {count} object(s). Empty it first.")
@@ -99,7 +99,7 @@ def _terminate_volume(rid, force):
     if not confirm(f"Delete volume {rid}?", force=force):
         print("Aborted.")
         return
-    ec2 = boto3.client("ec2", region_name="us-east-1")
+    ec2 = boto3.client("ec2")
     ec2.delete_volume(VolumeId=rid)
     print(f"Deleted volume {rid}")
 
