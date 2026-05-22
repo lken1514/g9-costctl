@@ -79,4 +79,57 @@ def run(args):
         args.apply       — bool, default False (dry-run)
         args.volume_id   — optional str, only migrate this volume when --apply
     """
-    raise NotImplementedError("TODO: implement migrate-gp3 — see module docstring")
+    ec2 = boto3.client("ec2", region_name="us-east-1")
+    delta = GP2_PRICE - GP3_PRICE
+
+    if not args.apply:
+        vols = ec2.describe_volumes(
+            Filters=[{"Name": "volume-type", "Values": ["gp2"]}]
+        ).get("Volumes", [])
+
+        print(f"gp2 volumes (price delta ${delta:.3f}/GB-month):")
+        print("-" * 78)
+        total = 0.0
+        for vol in vols:
+            vid = vol["VolumeId"]
+            size = vol["Size"]
+            attach = "(none)"
+            if vol.get("Attachments"):
+                attach = vol["Attachments"][0].get("InstanceId", "(none)")
+            savings = size * delta
+            total += savings
+            print(
+                f"  {vid:20} {size:5}GB  attached={attach:16} "
+                f"${savings:0.2f}/mo savings"
+            )
+        print("-" * 78)
+        if vols:
+            print(f"\nTotal potential savings: ${total:0.2f}/mo")
+        else:
+            print("\nNo gp2 volumes found.")
+        print(
+            "\n(dry-run — pass --apply --volume-id <id> to migrate one, "
+            "or --apply to migrate ALL)"
+        )
+        return
+
+    if args.volume_id:
+        volume_ids = [args.volume_id]
+    else:
+        volume_ids = [
+            v["VolumeId"]
+            for v in ec2.describe_volumes(
+                Filters=[{"Name": "volume-type", "Values": ["gp2"]}]
+            ).get("Volumes", [])
+        ]
+
+    if not volume_ids:
+        print("No gp2 volumes to migrate.")
+        return
+
+    for vid in volume_ids:
+        ec2.modify_volume(VolumeId=vid, VolumeType="gp3", Iops=3000, Throughput=125)
+        print(f"  -> modify_volume issued for {vid} (gp3, 3000 IOPS, 125 MiB/s)")
+
+    print("\nVolume(s) entering 'modifying' -> 'optimizing' state. App stays online.")
+    print("Use `costctl list volume` after ~30 minutes to confirm 'in-use' + gp3.")

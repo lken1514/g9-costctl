@@ -55,10 +55,26 @@ import boto3
 from datetime import datetime, timedelta, timezone
 from statistics import mean
 
+from commands._common import tags_to_dict
+
 
 def _avg_cpu(cw, instance_id, hours):
     """Return average CPU% over last N hours, or None if no datapoints."""
-    raise NotImplementedError("TODO: implement _avg_cpu — use get_metric_statistics")
+    end = datetime.now(timezone.utc)
+    start = end - timedelta(hours=hours)
+    resp = cw.get_metric_statistics(
+        Namespace="AWS/EC2",
+        MetricName="CPUUtilization",
+        Dimensions=[{"Name": "InstanceId", "Value": instance_id}],
+        StartTime=start,
+        EndTime=end,
+        Period=3600,
+        Statistics=["Average"],
+    )
+    points = [p.get("Average") for p in resp.get("Datapoints", []) if "Average" in p]
+    if not points:
+        return None
+    return mean(points)
 
 
 def run(args):
@@ -68,4 +84,34 @@ def run(args):
         args.threshold  — float, default 5.0 (% CPU)
         args.hours      — int, default 24
     """
-    raise NotImplementedError("TODO: implement run() — see module docstring")
+    ec2 = boto3.client("ec2", region_name="us-east-1")
+    cw = boto3.client("cloudwatch", region_name="us-east-1")
+
+    print(
+        f"Scanning running EC2 (excluding keep=true) — threshold {args.threshold:.1f}% "
+        f"over {args.hours}h:"
+    )
+    print("-" * 78)
+
+    idle_ids = []
+    paginator = ec2.get_paginator("describe_instances")
+    for page in paginator.paginate(Filters=[{"Name": "instance-state-name", "Values": ["running"]}]):
+        for reservation in page.get("Reservations", []):
+            for inst in reservation.get("Instances", []):
+                tags = tags_to_dict(inst.get("Tags"))
+                if tags.get("keep", "").lower() == "true":
+                    continue
+                iid = inst["InstanceId"]
+                itype = inst["InstanceType"]
+                avg = _avg_cpu(cw, iid, args.hours)
+                if avg is None:
+                    print(f"  {iid:20} {itype:12} cpu_{args.hours}h=NO DATA")
+                    continue
+                flag = "  <- IDLE" if avg < args.threshold else ""
+                if avg < args.threshold:
+                    idle_ids.append(iid)
+                print(f"  {iid:20} {itype:12} cpu_{args.hours}h={avg:6.2f}%{flag}")
+
+    print("-" * 78)
+    print(f"\nIdle: {len(idle_ids)} instance(s): {idle_ids}")
+    print("Tip: combo with terminate ->  ./costctl.py terminate ec2 --id <id>")
